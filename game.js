@@ -1,15 +1,19 @@
 var canvas;
 var canvasContext;
+
 var ballX = 50;
-var ballSpeedX = 10;
 var ballY = 50;
+
+var ballSpeedX = 10;
 var ballSpeedY = 4;
 
-var paddleLeft = 250;
-const paddleHeight = 100;
+var playerLeftScore = 0;
+var playerRightScore = 0;
 
+var paddleLeft = 250;
 var paddleRight = 250;
 
+const paddleHeight = 100;
 const paddleThickness = 10;
 
 function calculateMousePos(evt) {
@@ -32,6 +36,7 @@ window.onload = function() {
     setInterval(function() {
         moveEverything();
         loadEverything();
+        computerMovement();
     }, 
     1000/framesPerSecond);  
     
@@ -47,6 +52,15 @@ function ballReset() {
     ballY = canvas.height/2
 }
 
+function computerMovement() {
+    var paddleRightCenter = paddleRight + (paddleHeight / 2)
+    if (paddleRightCenter < ballY - 35) {
+        paddleRight += 6
+    } else if (paddleRightCenter > ballY + 35) {
+        paddleRight -= 6
+    }
+}
+
 function moveEverything() {
     ballX = ballX + ballSpeedX;
     ballY = ballY + ballSpeedY;
@@ -55,6 +69,7 @@ function moveEverything() {
             ballSpeedX = -ballSpeedX;
         } else {
             ballReset();
+            playerRightScore ++
         }
     }
     if (ballX > canvas.width) {
@@ -62,6 +77,7 @@ function moveEverything() {
             ballSpeedX = -ballSpeedX;
         } else {
             ballReset();
+            playerLeftScore ++
         }
     }
     if (ballY < 0) {
@@ -85,6 +101,10 @@ function loadEverything() {
 
     // calls function to create red circle
     colorCircle(ballX, ballY, 10, 'white')
+
+    // numbers are coordinates
+    canvasContext.fillText(playerLeftScore, 100, 100)
+    canvasContext.fillText(playerRightScore, canvas.width - 100, 100)
 
 }
 
