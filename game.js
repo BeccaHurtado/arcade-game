@@ -1,6 +1,7 @@
 var canvas;
 var canvasContext;
 var ballX = 50;
+var ballSpeedX = 15;
 
 window.onload = function() {
     console.log("Hello World!")
@@ -11,22 +12,33 @@ window.onload = function() {
     setInterval(function() {
         moveEverything();
         loadEverything();
-    }, 1000/framesPerSecond);    
+    }, 
+    1000/framesPerSecond);    
 }
 
 function moveEverything() {
-    ballX = ballX + 5;
+    ballX = ballX + ballSpeedX;
+    if (ballX < 0) {
+        ballSpeedX = -ballSpeedX;
+    }
+    if (ballX > canvas.width) {
+        ballSpeedX = -ballSpeedX;
+    }
 }
 
 function loadEverything() {
 
-    canvasContext.fillStyle = 'black';
-    // 0px from the left, 0px from the right. Size of object in the canvas.
-    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+    // covers screen with black
+    colorRect(0, 0, canvas.width, canvas.height, 'black');
+    // creates left player paddle
+    colorRect(0, 210, 10, 100, 'white');
+    // creates red rectangle
+    colorRect(ballX, 100, 10, 10, 'red');
+}
 
-    canvasContext.fillStyle = 'white';
-    canvasContext.fillRect(0, 210, 10, 100);
+function colorRect(leftX, topY, width, height, drawColor) {
+    
+    canvasContext.fillStyle = drawColor;
+    canvasContext.fillRect(leftX, topY, width, height);
 
-    canvasContext.fillStyle = 'red';
-    canvasContext.fillRect(ballX,100, 10, 10);
 }
