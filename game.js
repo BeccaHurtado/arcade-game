@@ -8,6 +8,10 @@ var ballSpeedY = 4;
 var paddleLeft = 250;
 const paddleHeight = 100;
 
+var paddleRight = 250;
+
+const paddleThickness = 10;
+
 function calculateMousePos(evt) {
     var rect = canvas.getBoundingClientRect();
     var root = document.documentElement;
@@ -54,7 +58,11 @@ function moveEverything() {
         }
     }
     if (ballX > canvas.width) {
-        ballSpeedX = -ballSpeedX;
+        if (ballY > paddleRight && ballY < paddleRight + paddleHeight) {
+            ballSpeedX = -ballSpeedX;
+        } else {
+            ballReset();
+        }
     }
     if (ballY < 0) {
         ballSpeedY = -ballSpeedY;
@@ -70,7 +78,10 @@ function loadEverything() {
     colorRect(0, 0, canvas.width, canvas.height, 'black');
 
     // creates left player paddle
-    colorRect(0, paddleLeft, 10, paddleHeight, 'white');
+    colorRect(0, paddleLeft, paddleThickness, paddleHeight, 'white');
+
+    // creates right computer paddle
+    colorRect(canvas.width - paddleThickness, paddleRight, paddleThickness, paddleHeight, 'white');
 
     // calls function to create red circle
     colorCircle(ballX, ballY, 10, 'white')
