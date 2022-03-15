@@ -37,11 +37,21 @@ window.onload = function() {
     })
 }
 
+function ballReset() {
+    ballSpeedX = -ballSpeedX;
+    ballX = canvas.width/2;
+    ballY = canvas.height/2
+}
+
 function moveEverything() {
     ballX = ballX + ballSpeedX;
     ballY = ballY + ballSpeedY;
     if (ballX < 0) {
-        ballSpeedX = -ballSpeedX;
+        if (ballY > paddleLeft && ballY < paddleLeft + paddleHeight) {
+            ballSpeedX = -ballSpeedX;
+        } else {
+            ballReset();
+        }
     }
     if (ballX > canvas.width) {
         ballSpeedX = -ballSpeedX;
