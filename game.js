@@ -119,6 +119,12 @@ function moveEverything() {
     }
 }
 
+function drawNet() {
+    for(var i=0; i<canvas.height; i+=40) {
+        colorRect(canvas.width/2-1, i ,2, 20, 'white');
+    }
+}
+
 function loadEverything() {
 
     // covers screen with black
@@ -136,6 +142,8 @@ function loadEverything() {
         canvasContext.fillText("click to continue", 350, 500)
         return;
     }
+
+    drawNet();
 
     // creates left player paddle
     colorRect(0, paddleLeft, paddleThickness, paddleHeight, 'white');
