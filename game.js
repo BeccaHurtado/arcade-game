@@ -138,13 +138,13 @@ function loadEverything() {
     }
 
     // creates left player paddle
-    colorRect(0, paddleLeft, paddleThickness, paddleHeight, 'yellow');
+    colorRect(0, paddleLeft, paddleThickness, paddleHeight, 'white');
 
     // creates right computer paddle
     colorRect(canvas.width - paddleThickness, paddleRight, paddleThickness, paddleHeight, 'white');
 
     // calls function to create red circle
-    colorCircle(ballX, ballY, 10, 'blue')
+    colorCircle(ballX, ballY, 10, 'white')
 
     // numbers are coordinates
     canvasContext.fillText(playerLeftScore, 100, 100)
