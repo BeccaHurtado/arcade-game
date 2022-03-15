@@ -9,6 +9,10 @@ var ballSpeedY = 4;
 
 var playerLeftScore = 0;
 var playerRightScore = 0;
+const winningScore = 3;
+
+// tells it to now show end screen 
+var endGame = false;
 
 var paddleLeft = 250;
 var paddleRight = 250;
@@ -27,6 +31,14 @@ function calculateMousePos(evt) {
     };
 }
 
+function handleMouseClick(evt) {
+    if (endGame) {
+        playerLeftScore = 0
+        playerRightScore = 0
+        endGame = false
+    }
+}
+
 window.onload = function() {
     console.log("Hello World!")
     canvas = document.getElementById('gameCanvas');
@@ -36,9 +48,10 @@ window.onload = function() {
     setInterval(function() {
         moveEverything();
         loadEverything();
-        computerMovement();
     }, 
-    1000/framesPerSecond);  
+    1000/framesPerSecond); 
+
+    canvas.addEventListener('mousedown', handleMouseClick) 
     
     canvas.addEventListener('mousemove', function(evt) {
         var mousePos = calculateMousePos(evt);
@@ -47,6 +60,11 @@ window.onload = function() {
 }
 
 function ballReset() {
+    if (playerLeftScore >= winningScore || playerRightScore >= winningScore) {
+        playerLeftScore = 0;
+        playerRightScore = 0;
+        endGame = true;
+    }
     ballSpeedX = -ballSpeedX;
     ballX = canvas.width/2;
     ballY = canvas.height/2
@@ -62,22 +80,35 @@ function computerMovement() {
 }
 
 function moveEverything() {
+    if (endGame) {
+        return;
+    }
+
+    computerMovement()
+
     ballX = ballX + ballSpeedX;
     ballY = ballY + ballSpeedY;
     if (ballX < 0) {
         if (ballY > paddleLeft && ballY < paddleLeft + paddleHeight) {
             ballSpeedX = -ballSpeedX;
+            
+            var deltaY = ballY - (paddleLeft + paddleHeight / 2)
+            ballSpeedY = deltaY * 0.35
         } else {
-            ballReset();
             playerRightScore ++
+            ballReset();
         }
     }
     if (ballX > canvas.width) {
         if (ballY > paddleRight && ballY < paddleRight + paddleHeight) {
             ballSpeedX = -ballSpeedX;
+
+            var deltaY = ballY - (paddleRight + paddleHeight / 2)
+            ballSpeedY = deltaY * 0.35
         } else {
-            ballReset();
+            // must be BEFORE ballReset() so the score is saved before the reset
             playerLeftScore ++
+            ballReset();
         }
     }
     if (ballY < 0) {
@@ -93,14 +124,27 @@ function loadEverything() {
     // covers screen with black
     colorRect(0, 0, canvas.width, canvas.height, 'black');
 
+    if (endGame) {
+        canvasContext.fillStyle = 'white'
+
+        if (playerLeftScore >= winningScore) {
+            canvasContext.fillText("Left Player Won!", 350, 200)
+        } else { (playerRightScore >= winningScore) 
+            canvasContext.fillText("Right Player Won!", 350, 200)   
+        }
+
+        canvasContext.fillText("click to continue", 350, 500)
+        return;
+    }
+
     // creates left player paddle
-    colorRect(0, paddleLeft, paddleThickness, paddleHeight, 'white');
+    colorRect(0, paddleLeft, paddleThickness, paddleHeight, 'yellow');
 
     // creates right computer paddle
     colorRect(canvas.width - paddleThickness, paddleRight, paddleThickness, paddleHeight, 'white');
 
     // calls function to create red circle
-    colorCircle(ballX, ballY, 10, 'white')
+    colorCircle(ballX, ballY, 10, 'blue')
 
     // numbers are coordinates
     canvasContext.fillText(playerLeftScore, 100, 100)
