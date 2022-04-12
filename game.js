@@ -130,16 +130,16 @@ function loadEverything() {
     // covers screen with black
     colorRect(0, 0, canvas.width, canvas.height, 'black');
 
-    if (endGame) {
-        canvasContext.fillStyle = 'white'
+    if(endGame) {
+        canvasContext.fillStyle = 'white';
 
         if (playerLeftScore >= winningScore) {
-            canvasContext.fillText("Left Player Won!", 350, 200)
-        } else { (playerRightScore >= winningScore) 
-            canvasContext.fillText("Right Player Won!", 350, 200)   
+            canvasContext.fillText("Left Player Won!", 350, 200);
+        } else if(playerRightScore >= winningScore) {
+            canvasContext.fillText("Right Player Won!", 350, 200);  
         }
 
-        canvasContext.fillText("click to continue", 350, 500)
+        canvasContext.fillText("click to continue", 350, 500);
         return;
     }
 
